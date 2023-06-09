@@ -5,7 +5,7 @@ const data = [
     publicationDate: '1954-07-29',
     author: 'J. R. R. Tolkien',
     genres: ['fantasy', 'high-fantasy', 'adventure', 'fiction', 'novels', 'literature'],
-    hasMovieAdaptation: true,
+    hasMovieAdaptation: false,
     pages: 1216,
     translations: {
       spanish: 'El señor de los anillos',
@@ -130,9 +130,10 @@ function getBook(id) {
   return data.find((d) => d.id === id);
 }
 
+/* 
 // Destructuring
 
-const book = getBook(1);
+const book = getBook(3);
 console.log(book);
 
 // const title = book.title;
@@ -179,3 +180,113 @@ console.log(`The book has ${pagesRange} pages`);
 //   return str.split('-')[0];
 // }
 // console.log(getYear(publicationDate));
+
+// ------------------------------------ SHORT CIRCUITING  ------------------------------\\
+
+console.log(true && 'Second');
+console.log(false && 'Second');
+console.log(hasMovieAdaptation && 'This book has a movie');
+
+// falsy --> 0, "", null, undefined
+console.log('jonas' && 'Some string');
+console.log(0 && 'Some string');
+
+console.log(true || 'Some string');
+console.log(false || 'Some string');
+
+console.log(book.translations.spanish);
+
+const spanishTranslation = book.translations.spanish || 'NOT TRANSLATED';
+spanishTranslation;
+
+const countWrong = book.reviews.librarything?.reviewsCount || 'No data';
+countWrong; // This is actually 0 but we see that "no data";
+
+// Nullish Coalescing Operator...
+// result = (a !== null && a !== undefined) ? a : b;
+// const count = book.reviews.librarything?.reviewsCount ?? 'No Data';
+
+// count;
+
+// ------------------------------------ OPTIONAL CHAINING  ------------------------------\\
+
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews?.goodreads?.reviewsCount;
+  const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
+  return goodreads + librarything;
+}
+
+/
+console.log(getTotalReviewCount(book)); */
+
+// ------------------------------------ THE ARRAY MAP METHOD... ------------------------------\\
+
+const books = getBooks();
+books;
+
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews?.goodreads?.reviewsCount;
+  const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
+  return goodreads + librarything;
+}
+
+// const x = [1, 2, 3, 4].map((el) => el * 2);
+
+const titles = books.map((book) => book.title);
+titles;
+const essentialData = books.map((book) => ({
+  title: book.title,
+  author: book.author,
+  reviewsCount: getTotalReviewCount(book)
+}));
+essentialData;
+
+// ------------------------------------ THE ARRAY FILTER METHOD... ------------------------------\\
+
+// const longBookswithMovie = books.filter((book) => book.pages > 500)
+// .filter((book) => book.hasMovieAdaptation);
+
+const longBookswithMovie = books.filter((book) => book.pages > 500 && book.hasMovieAdaptation);
+
+longBookswithMovie;
+
+const adventureBooks = books.filter((book) => book.genres.includes('adventure')).map((book) => book.title);
+adventureBooks;
+
+// ------------------------------------ THE ARRAY REDUCE METHOD... ------------------------------\\
+
+const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
+pagesAllBooks;
+
+// ------------------------------------ THE ARRAY SORT METHOD... ------------------------------\\
+
+const arr = [3, 7, 1, 6, 9];
+const sorted = arr.slice().sort((a, b) => a - b);
+sorted;
+arr;
+
+const sortedByPages = books.slice().sort((a, b) => a.pages - b.pages);
+sortedByPages;
+
+// ------------------------------------ WORKING WITH IMMUTABLE ARRAYS... ------------------------------\\
+
+// 1) Add book object to array...
+
+const newBook = {
+  id: 6,
+  title: 'Harry Potter and the Chamber of Secrets',
+  author: 'J. K. Rowling'
+};
+
+const booksAfterAdd = [...books, newBook];
+booksAfterAdd;
+
+// 2) Delete a book object from  array...
+
+const booksAfterDelete = booksAfterAdd.filter((book) => book.id !== 3);
+booksAfterDelete;
+
+// 3) Update a book object in the array...
+
+const booksAfterUpdate = booksAfterDelete.map((book) => (book.id === 1 ? { ...book, pages: 12 } : book));
+booksAfterUpdate;
