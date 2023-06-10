@@ -1,3 +1,5 @@
+/* 
+
 const data = [
   {
     id: 1,
@@ -130,7 +132,7 @@ function getBook(id) {
   return data.find((d) => d.id === id);
 }
 
-/* 
+
 // Destructuring
 
 const book = getBook(3);
@@ -217,7 +219,7 @@ function getTotalReviewCount(book) {
 }
 
 /
-console.log(getTotalReviewCount(book)); */
+console.log(getTotalReviewCount(book));
 
 // ------------------------------------ THE ARRAY MAP METHOD... ------------------------------\\
 
@@ -255,7 +257,7 @@ adventureBooks;
 
 // ------------------------------------ THE ARRAY REDUCE METHOD... ------------------------------\\
 
-const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
+ const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
 pagesAllBooks;
 
 // ------------------------------------ THE ARRAY SORT METHOD... ------------------------------\\
@@ -289,4 +291,32 @@ booksAfterDelete;
 // 3) Update a book object in the array...
 
 const booksAfterUpdate = booksAfterDelete.map((book) => (book.id === 1 ? { ...book, pages: 12 } : book));
-booksAfterUpdate;
+booksAfterUpdate; 
+
+*/
+
+// ------------------------------------ ASYNCHRONOUS JAVASCRIPT: PROMISES ------------------------------\\
+
+// First of all we deactivated rest of codes. And start from scratch :)
+
+// console.log(fetch('https://jsonplaceholder.typicode.com/todos/1'));
+
+fetch('https://jsonplaceholder.typicode.com/todos')
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
+console.log('Halil');
+// Watch out the logs, Halil is executed first after that fetch opearation implemented.
+
+// ------------------------------------ ASYNCHRONOUS JAVASCRIPT: ASYNC AWAIT ------------------------------\\
+
+async function getTodos() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await res.json();
+  console.log(data);
+}
+
+const todos = getTodos();
+console.log(todos);
+
+console.log('Halil');
